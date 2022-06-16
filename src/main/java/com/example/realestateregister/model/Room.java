@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @Table(name = "room")
 public class Room {
     @NotNull
-    @JsonIgnore
+//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -27,9 +27,10 @@ public class Room {
     @Positive @Min(message = "must be at least 1 m2", value = 1)
     @Column(nullable = false)
     long size;
-    @NotNull
+    //    @NotNull
     @ManyToOne()
-    @JoinColumn(name = "building", referencedColumnName = "id")
-    @JsonBackReference
+    @JoinColumn(name = "building", referencedColumnName = "id", foreignKey = @ForeignKey(name = "Fk_rooms_building"))
+//    @JsonBackReference
+    @JsonIgnore
     Building building;
 }

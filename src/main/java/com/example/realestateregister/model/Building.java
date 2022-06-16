@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "building")
 public class Building {
     @NotNull
-    @JsonIgnore
+//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -27,12 +27,14 @@ public class Building {
     @Positive
     @Column(nullable = false)
     long price;
-    @NotNull
+    //   @NotNull
     @OneToMany(mappedBy = "building")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     List<Room> rooms;
-    @NotNull
+    //  @NotNull
     @OneToMany(mappedBy = "building")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     List<Role> roles;
 }

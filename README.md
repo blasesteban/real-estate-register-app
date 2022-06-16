@@ -1,10 +1,6 @@
 # About the project
-The main goal this website is to search you matches with the best odds on both players to risk as less money as possible.
-The website which can cooperate many odds of betting websites and give you those matches
-which are worth to bet for both players. In that case if you bet with certain amount of money on both players, and
-you can definitely win back the money that you invested.
-You can search matchPairs by categories and you can calculate the profit of the invested money.
-
+My project is a real estate registry. The buildings have different 
+##
 # Build with
 - Java
 - Java spring boot
@@ -47,3 +43,34 @@ Contributing is for show how we used version control.
 - We used branches and did pull requests.
 - Committed everything file by file.
 - We worked with different sprints in this project.
+
+```mermaid
+sequenceDiagram
+participant room
+participant building
+participant role
+participant person
+note left of room: CRUD
+note left of building: CRUD
+note left of role: CRUD
+note left of person: CRUD
+
+
+room->>building: add to building
+role->>building: add to building
+role->>person: add to person
+```
+baba
+```mermaid
+sequenceDiagram
+participant Alice
+participant Bob
+Alice->>John: Hello John, how are you?
+loop Healthcheck
+John->>John: Fight against hypochondria
+end
+Note right of John: Rational thoughts <br/>prevail!
+John-->>Alice: Great!
+John->>Bob: How about you?
+Bob-->>John: Jolly good!
+```

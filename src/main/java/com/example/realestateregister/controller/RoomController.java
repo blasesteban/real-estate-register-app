@@ -1,5 +1,6 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.RoomDto;
 import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/room")
 public class RoomController {
     private final RoomService roomService;
@@ -28,12 +29,12 @@ public class RoomController {
     }
 
     @PostMapping
-    public long addRoomAndReturnId(@RequestBody @Valid Room room) {
+    public long addRoomAndReturnId(@RequestBody @Valid RoomDto room) {
         return roomService.addRoomAndReturnId(room);
     }
 
     @PutMapping("/{id}")
-    public void updateRoomById(@RequestBody @Valid Room room, @PathVariable("id") long id) {
+    public void updateRoomById(@RequestBody @Valid RoomDto room, @PathVariable("id") long id) {
         roomService.updateRoomById(room, id);
     }
 

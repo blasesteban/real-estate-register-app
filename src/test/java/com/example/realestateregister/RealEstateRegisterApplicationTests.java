@@ -1,8 +1,11 @@
 package com.example.realestateregister;
 
+import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.dto.BuildingRoomDto;
+import com.example.realestateregister.dto.PersonDto;
+import com.example.realestateregister.dto.RoomDto;
 import com.example.realestateregister.model.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,6 +19,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RealEstateRegisterApplicationTests {
     private final String BUILDING_URL = "/building";
@@ -27,16 +31,31 @@ class RealEstateRegisterApplicationTests {
 
     private static Building[] buildingArray() {
         return new Building[]{
-                new Building(1, 1, 1, null, null),
-                new Building(2, 2, 2, null, null),
+                new Building(1, 1, 1, new ArrayList<>(), new ArrayList<>()),
+                new Building(2, 2, 2, new ArrayList<>(), new ArrayList<>()),
+        };
+    }
+
+    private static BuildingDto[] buildingDtoArray() {
+        return new BuildingDto[]{
+                new BuildingDto(1, 1),
+                new BuildingDto(2, 2),
         };
     }
 
     private static Person[] personArray() {
         return new Person[]{
-                new Person(1, "a", "a", "a", "0036101111111", null),
-                new Person(2, "b", "b", "b", "0036202222222", null),
-                new Person(3, "c", "c", "c", "0036303333333", null),
+                new Person(1, "a", "a", "a", "0036101111111", new ArrayList<>()),
+                new Person(2, "b", "b", "b", "0036202222222", new ArrayList<>()),
+                new Person(3, "c", "c", "c", "0036303333333", new ArrayList<>()),
+        };
+    }
+
+    private static PersonDto[] personDtoArray() {
+        return new PersonDto[]{
+                new PersonDto("a", "a", "a", "0036101111111"),
+                new PersonDto("b", "b", "b", "0036202222222"),
+                new PersonDto("c", "c", "c", "0036303333333"),
         };
     }
 
@@ -56,35 +75,43 @@ class RealEstateRegisterApplicationTests {
         };
     }
 
-    @Test
-    void getAllBuildings() {
-        Building[] expectedArr = buildingArray();
-        for (Building building : buildingArray()) {
-            postBuilding(BUILDING_URL, building);
-        }
-        final ResponseEntity<Building[]> response = restTemplate.getForEntity(BUILDING_URL, Building[].class);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        Building[] actualArr = response.getBody();
-        assertBuildingArraysHasSameElements(expectedArr, actualArr);
+    private static RoomDto[] roomDtosArray() {
+        return new RoomDto[]{
+                new RoomDto(RoomType.DINING_ROOM, 1),
+                new RoomDto(RoomType.GUEST_ROOM, 2),
+                new RoomDto(RoomType.LIVING_ROOM, 3),
+        };
     }
 
     @Test
+    @Order(1)
+    void getAllBuildings() {
+        Building[] expectedArr = buildingArray();
+        for (BuildingDto buildingDto : buildingDtoArray()) {
+            postObject(BUILDING_URL, buildingDto);
+        }
+        ResponseEntity<Building[]> response = restTemplate.getForEntity(BUILDING_URL, Building[].class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Building[] actualArr = response.getBody();
+        assertArraysHasSameElements(expectedArr, actualArr);
+    }
+
+    @Test
+    @Order(2)
     void getBuilding() {
-        final long BUILDING_ID = 1L;
+        final long BUILDING_ID = 3;
         Room[] roomArray = roomArray();
         for (Room room : roomArray) {
             postRoom(ROOM_URL, room);
         }
-        List<Room> roomList = new ArrayList<>() {{
-            addAll(Arrays.stream(roomArray()).toList());
-        }};
-        Building building = new Building(BUILDING_ID, 1, 1, Arrays.stream(roomArray()).toList(), null);
-        postBuilding(BUILDING_URL, building);
+        List<Room> roomList = Arrays.asList(roomArray);
+        BuildingDto buildingDto = new BuildingDto(1, 1);
+        postObject(BUILDING_URL, buildingDto);
         addRoomsToBuilding(BUILDING_ID, roomList);
-        Building expectedBuilding = new Building(BUILDING_ID, 1, 1, Arrays.stream(roomArray()).toList(), null);
+        Building expectedBuilding = new Building(BUILDING_ID, 1, 1, roomList, null);
         final ResponseEntity<Building> response = restTemplate.getForEntity(BUILDING_URL + "/" + BUILDING_ID, Building.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertSameBuilding(expectedBuilding, Objects.requireNonNull(response.getBody()));
+        assertSameBuilding(expectedBuilding, response.getBody());
     }
 
     private void addRoomsToBuilding(long buildingId, List<Room> roomList) {
@@ -101,10 +128,11 @@ class RealEstateRegisterApplicationTests {
     }
 
     @Test
+    @Order(3)
     void getAllRooms() {
         Room[] expectedArr = roomArray();
         for (Room room : roomArray()) {
-            postRoom(BUILDING_URL, room);
+            postRoom(ROOM_URL, room);
         }
         final ResponseEntity<Room[]> response = restTemplate.getForEntity(ROOM_URL, Room[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -112,10 +140,16 @@ class RealEstateRegisterApplicationTests {
         assertRoomArraysHasSameElements(expectedArr, actualArr);
     }
 
-    private HttpEntity<Building> createBuildingHttpEntityWithMediatypeJson(Building building) {
+    private HttpEntity<?> createObjectHttpEntityWithMediatypeJson(Object object) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(building, headers);
+        return new HttpEntity<>(object, headers);
+    }
+
+    private HttpEntity<BuildingDto> createBuildingHttpEntityWithMediatypeJson(BuildingDto buildingDto) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(buildingDto, headers);
     }
 
     private HttpEntity<Room> createRoomHttpEntityWithMediatypeJson(Room room) {
@@ -124,8 +158,13 @@ class RealEstateRegisterApplicationTests {
         return new HttpEntity<>(room, headers);
     }
 
-    private void postBuilding(String url, Building building) {
-        final HttpEntity<Building> httpEntity = createBuildingHttpEntityWithMediatypeJson(building);
+    private void postObject(String url, Object object) {
+        final HttpEntity<?> httpEntity = createObjectHttpEntityWithMediatypeJson(object);
+        restTemplate.postForEntity(url, httpEntity, String.class);
+    }
+
+    private void postBuilding(String url, BuildingDto buildingDto) {
+        final HttpEntity<BuildingDto> httpEntity = createBuildingHttpEntityWithMediatypeJson(buildingDto);
         restTemplate.postForEntity(url, httpEntity, String.class);
     }
 
@@ -133,7 +172,11 @@ class RealEstateRegisterApplicationTests {
         final HttpEntity<Room> httpEntity = createRoomHttpEntityWithMediatypeJson(room);
         restTemplate.postForEntity(url, httpEntity, String.class);
     }
-
+    private void assertArraysHasSameElements(Object[] expectedArr, Object[] actualArr) {
+        List<Object> expected = Arrays.asList(expectedArr);
+        List<Object> actual = Arrays.asList(actualArr);
+        assertListsHasSameElements(expected, actual);
+    }
     private void assertBuildingArraysHasSameElements(Building[] expectedArr, Building[] actualArr) {
         List<Building> expected = Arrays.asList(expectedArr);
         List<Building> actual = Arrays.asList(actualArr);
@@ -145,7 +188,9 @@ class RealEstateRegisterApplicationTests {
         List<Room> actual = Arrays.asList(actualArr);
         assertRoomListsHasSameElements(expected, actual);
     }
-
+    private void assertListsHasSameElements(List<Object> expected, List<Object> actual) {
+        assertTrue(expected.size() == actual.size() && expected.containsAll(actual) && actual.containsAll(expected));
+    }
     private void assertBuildingListsHasSameElements(List<Building> expected, List<Building> actual) {
         assertTrue(expected.size() == actual.size() && expected.containsAll(actual) && actual.containsAll(expected));
     }

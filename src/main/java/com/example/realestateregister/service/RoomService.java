@@ -1,6 +1,7 @@
 package com.example.realestateregister.service;
 
 import com.example.realestateregister.dao.RoomJpaDao;
+import com.example.realestateregister.dto.RoomDto;
 import com.example.realestateregister.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,17 @@ public class RoomService {
         return roomDao.findById(id).orElseThrow();
     }
 
-    public long addRoomAndReturnId(Room room) {
+    public long addRoomAndReturnId(RoomDto roomDto) {
+        Room room = new Room();
+        room.setRoomType(roomDto.getRoomType());
+        room.setSize(roomDto.getSize());
         return roomDao.save(room).getId();
     }
 
-    public void updateRoomById(Room newRoom, long id) {
+    public void updateRoomById(RoomDto roomDto, long id) {
         Room room = roomDao.findById(id).orElseThrow();
-        room.setRoomType(newRoom.getRoomType());
-        room.setSize(newRoom.getSize());
-        room.setBuilding(newRoom.getBuilding());
+        room.setRoomType(roomDto.getRoomType());
+        room.setSize(roomDto.getSize());
         roomDao.save(room);
     }
 

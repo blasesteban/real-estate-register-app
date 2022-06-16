@@ -3,6 +3,7 @@ package com.example.realestateregister.service;
 import com.example.realestateregister.dao.BuildingJpaDao;
 import com.example.realestateregister.dao.RoleJpaDao;
 import com.example.realestateregister.dao.RoomJpaDao;
+import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.dto.BuildingRoleDto;
 import com.example.realestateregister.dto.BuildingRoomDto;
 import com.example.realestateregister.model.*;
@@ -32,22 +33,23 @@ public class BuildingService {
         return buildingDao.findById(id).orElseThrow();
     }
 
-    public long addBuildingAndReturnId(Building building) {
+    public long addBuildingAndReturnId(BuildingDto buildingDto) {
+        Building building=new Building();
+        building.setSquareMeters(buildingDto.getSquareMeters());
+        building.setPrice(buildingDto.getPrice());
         return buildingDao.save(building).getId();
     }
 
-    public void updateBuildingById(Building newBuilding, long id) {
+    public void updateBuildingById(BuildingDto buildingDto, long id) {
         Building building = buildingDao.findById(id).orElseThrow();
-        building.setSquareMeters(newBuilding.getSquareMeters());
-        building.setPrice(newBuilding.getPrice());
-        building.setRoles(newBuilding.getRoles());
+        building.setSquareMeters(buildingDto.getSquareMeters());
+        building.setPrice(buildingDto.getPrice());
         buildingDao.save(building);
     }
 
     public void deleteBuildingById(long id) {
         buildingDao.deleteById(id);
     }
-
 
     public void addRoomToBuilding(BuildingRoomDto buildingRoomDto) {
         roomDao.addToBuilding(buildingRoomDto.getRoomId(), buildingDao.findById(buildingRoomDto.getBuildingId()).orElseThrow());

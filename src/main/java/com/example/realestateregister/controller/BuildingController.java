@@ -1,5 +1,6 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.dto.BuildingRoleDto;
 import com.example.realestateregister.dto.BuildingRoomDto;
 import com.example.realestateregister.model.Building;
@@ -8,6 +9,8 @@ import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.BuildingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,13 +37,24 @@ public class BuildingController {
     }
 
     @PostMapping
-    public long addBuildingAndReturnId(@RequestBody @Valid Building building) {
-        return buildingService.addBuildingAndReturnId(building);
+    public ResponseEntity<?> addBuildingAndReturnId(@RequestBody @Valid BuildingDto building, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid building");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid building");
+        }
+        return ResponseEntity.ok(buildingService.addBuildingAndReturnId(building));
     }
 
     @PutMapping("/{id}")
-    public void updateBuildingById(@RequestBody @Valid Building building, @PathVariable("id") long id) {
+    public ResponseEntity<String> updateBuildingById(@RequestBody @Valid BuildingDto building, @PathVariable("id") long id, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid building");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid building");
+        }
         buildingService.updateBuildingById(building, id);
+        return ResponseEntity.ok("building is updated");
     }
 
     @DeleteMapping("/{id}")
@@ -49,8 +63,14 @@ public class BuildingController {
     }
 
     @PostMapping("/room")
-    public void addRoomToBuilding(@RequestBody @Valid BuildingRoomDto buildingRoomDto) {
+    public ResponseEntity<String> addRoomToBuilding(@RequestBody @Valid BuildingRoomDto buildingRoomDto, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid building");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid building");
+        }
         buildingService.addRoomToBuilding(buildingRoomDto);
+        return ResponseEntity.ok("rooms are added to the building");
     }
 
     @GetMapping("/{id}/room")
@@ -59,8 +79,14 @@ public class BuildingController {
     }
 
     @PostMapping("/role")
-    public void addRoleToBuilding(@RequestBody @Valid BuildingRoleDto buildingRoleDto) {
+    public ResponseEntity<String> addRoleToBuilding(@RequestBody @Valid BuildingRoleDto buildingRoleDto, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid building");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid building");
+        }
         buildingService.addRoleToBuilding(buildingRoleDto);
+        return ResponseEntity.ok("roles are added to the building");
     }
 
     @GetMapping("/{id}/role")

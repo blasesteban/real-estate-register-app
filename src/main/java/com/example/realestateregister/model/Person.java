@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "person")
 public class Person {
     @NotNull
-    @JsonIgnore
+//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -31,8 +31,9 @@ public class Person {
     @Pattern(regexp = "^[\\d]{4,10}$", message = "only type numbers")
     @Column(name = "phone_number")
     String phoneNumber;
-    @NotNull
+    //    @NotNull
     @OneToMany(mappedBy = "person")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     List<Role> roles;
 }
