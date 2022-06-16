@@ -1,0 +1,33 @@
+
+version: '3.7'
+services:
+  db:
+    image: 'postgres:latest'
+    container_name: db
+    environment:
+      - POSTGRES_DB=betsafe
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    volumes:
+      - db-data:/var/lib/postgresql
+    ports:
+      - "5432"
+
+  backend:
+    container_name: server
+    build:
+      context: .
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=betsafe
+      - DB_USER_NAME=compose-postgres
+      - DB_PASSWORD=compose-postgres
+      - HIBERNATE_MODE=update
+      - JWT_SECRET=g+pt9/RUMWQjSTujfGnpMtmu0mepDWnqjEmkI6QzkQfTRdJTLp7T1C/bLnPJldgrW4HVrMRbtiF14GdTWcC6fg==
+    ports:
+      - "8080:8080"
+volumes:
+  db-data:
