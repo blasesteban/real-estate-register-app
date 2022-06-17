@@ -1,5 +1,6 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.Room;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -17,12 +20,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BuildingControllerTest {
-
     @InjectMocks
     private BuildingController buildingController;
-
+    @Mock
+    private BindingResult br;
     @Mock
     private BuildingService buildingService;
+
     private final Room room1 = new Room();
     private final Room room2 = new Room();
     private final Room room3 = new Room();
@@ -54,16 +58,16 @@ class BuildingControllerTest {
         assertEquals(expected.getRooms(), building1.getRooms());
     }
 
-/*    @Test
+    @Test
     void addBuildingAndReturnId() {
+        when(br.hasErrors()).thenReturn(false);
         when(buildingService.addBuildingAndReturnId(new BuildingDto(building1.getSquareMeters(), building1.getPrice()))).thenReturn(building1.getId());
-        Long expected = buildingController.addBuildingAndReturnId(new BuildingDto(building1.getSquareMeters(), building1.getPrice()));
-        assertEquals(expected, building1.getId());
-    }*/
+        ResponseEntity<?> expected = buildingController.addBuildingAndReturnId(new BuildingDto(building1.getSquareMeters(), building1.getPrice()), br);
+        assertEquals(expected.getBody(), building1.getId());
+    }
 
     @Test
     void updateBuildingById() {
-
     }
 
     @Test

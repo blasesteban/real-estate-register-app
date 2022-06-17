@@ -2,6 +2,7 @@ package com.example.realestateregister.service;
 
 import com.example.realestateregister.dao.PersonJpaDao;
 import com.example.realestateregister.dao.RoleJpaDao;
+import com.example.realestateregister.dto.PersonDto;
 import com.example.realestateregister.dto.PersonRoleDto;
 import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
@@ -30,17 +31,21 @@ public class PersonService {
         return personDao.findById(id).orElseThrow();
     }
 
-    public long addPersonAndReturnId(Person person) {
+    public long addPersonAndReturnId(PersonDto personDto) {
+        Person person = new Person();
+        person.setFirstname(personDto.getFirstname());
+        person.setSurname(personDto.getSurname());
+        person.setAddress(personDto.getAddress());
+        person.setPhoneNumber(personDto.getPhoneNumber());
         return personDao.save(person).getId();
     }
 
-    public void updatePersonById(Person newPerson, long id) {
+    public void updatePersonById(PersonDto personDto, long id) {
         Person person = personDao.findById(id).orElseThrow();
-        person.setFirstname(newPerson.getFirstname());
-        person.setSurname(newPerson.getSurname());
-        person.setAddress(newPerson.getAddress());
-        person.setPhoneNumber(newPerson.getPhoneNumber());
-        person.setRoles(newPerson.getRoles());
+        person.setFirstname(personDto.getFirstname());
+        person.setSurname(personDto.getSurname());
+        person.setAddress(personDto.getAddress());
+        person.setPhoneNumber(personDto.getPhoneNumber());
         personDao.save(person);
     }
 
@@ -50,7 +55,6 @@ public class PersonService {
 
     public void addRoleToPerson(PersonRoleDto personRoleDto) {
         roleDao.addToPerson(personRoleDto.getRoleId(), personDao.findById(personRoleDto.getPersonId()).orElseThrow());
-
     }
 
     public List<Role> listRolesByPerson(long id) {

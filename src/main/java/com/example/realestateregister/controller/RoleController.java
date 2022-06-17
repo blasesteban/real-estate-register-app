@@ -1,8 +1,12 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.RoleDto;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.service.RoleService;
-import org.springframework.stereotype.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,6 +16,7 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
     private final RoleService roleService;
+    private final Logger logger = LoggerFactory.getLogger(BuildingController.class);
 
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
@@ -28,13 +33,24 @@ public class RoleController {
     }
 
     @PostMapping
-    public long addRoleAndReturnId(@RequestBody @Valid Role role) {
-        return roleService.addRoleAndReturnId(role);
+    public ResponseEntity<?> addRoleAndReturnId(@RequestBody @Valid RoleDto role, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid role");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid role");
+        }
+        return ResponseEntity.ok(roleService.addRoleAndReturnId(role));
     }
 
     @PutMapping("/{id}")
-    public void updateRoleById(@RequestBody @Valid Role role, @PathVariable("id") long id) {
+    public ResponseEntity<String> updateRoleById(@RequestBody @Valid RoleDto role, @PathVariable("id") long id, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid role");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid role");
+        }
         roleService.updateRoleById(role, id);
+        return ResponseEntity.ok("role is updated");
     }
 
     @DeleteMapping("/{id}")

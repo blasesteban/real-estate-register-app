@@ -1,6 +1,7 @@
 package com.example.realestateregister.service;
 
 import com.example.realestateregister.dao.RoleJpaDao;
+import com.example.realestateregister.dto.RoleDto;
 import com.example.realestateregister.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,15 @@ public class RoleService {
         return roleDao.findById(id).orElseThrow();
     }
 
-    public long addRoleAndReturnId(Role role) {
+    public long addRoleAndReturnId(RoleDto roleDto) {
+        Role role = new Role();
+        role.setRoleType(roleDto.getRoleType());
         return roleDao.save(role).getId();
     }
 
-    public void updateRoleById(Role newRole, long id) {
+    public void updateRoleById(RoleDto roleDto, long id) {
         Role role = roleDao.findById(id).orElseThrow();
-        role.setRoleType(newRole.getRoleType());
-        role.setBuilding(newRole.getBuilding());
-        role.setPerson(newRole.getPerson());
+        role.setRoleType(roleDto.getRoleType());
         roleDao.save(role);
     }
 

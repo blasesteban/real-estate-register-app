@@ -31,8 +31,8 @@ class RealEstateRegisterApplicationTests {
 
     private static Building[] buildingArray() {
         return new Building[]{
-                new Building(1, 1, 1, new ArrayList<>(), new ArrayList<>()),
-                new Building(2, 2, 2, new ArrayList<>(), new ArrayList<>()),
+                new Building(1, 1, 1, null, null),
+                new Building(2, 2, 2, null, null),
         };
     }
 
@@ -83,6 +83,8 @@ class RealEstateRegisterApplicationTests {
         };
     }
 
+/*    @AfterEach
+    void */
     @Test
     @Order(1)
     void getAllBuildings() {
@@ -93,20 +95,19 @@ class RealEstateRegisterApplicationTests {
         ResponseEntity<Building[]> response = restTemplate.getForEntity(BUILDING_URL, Building[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Building[] actualArr = response.getBody();
-        assertArraysHasSameElements(expectedArr, actualArr);
+        assertBuildingArraysHasSameElements(expectedArr, actualArr);
     }
 
     @Test
     @Order(2)
     void getBuilding() {
         final long BUILDING_ID = 3;
-        Room[] roomArray = roomArray();
-        for (Room room : roomArray) {
-            postRoom(ROOM_URL, room);
+        for (RoomDto roomDto : roomDtosArray()) {
+            postRoom(ROOM_URL, roomDto);
         }
-        List<Room> roomList = Arrays.asList(roomArray);
+        List<Room> roomList = Arrays.asList(roomArray());
         BuildingDto buildingDto = new BuildingDto(1, 1);
-        postObject(BUILDING_URL, buildingDto);
+        postBuilding(BUILDING_URL, buildingDto);
         addRoomsToBuilding(BUILDING_ID, roomList);
         Building expectedBuilding = new Building(BUILDING_ID, 1, 1, roomList, null);
         final ResponseEntity<Building> response = restTemplate.getForEntity(BUILDING_URL + "/" + BUILDING_ID, Building.class);
@@ -131,7 +132,7 @@ class RealEstateRegisterApplicationTests {
     @Order(3)
     void getAllRooms() {
         Room[] expectedArr = roomArray();
-        for (Room room : roomArray()) {
+        for (RoomDto room : roomDtosArray()) {
             postRoom(ROOM_URL, room);
         }
         final ResponseEntity<Room[]> response = restTemplate.getForEntity(ROOM_URL, Room[].class);
@@ -152,10 +153,10 @@ class RealEstateRegisterApplicationTests {
         return new HttpEntity<>(buildingDto, headers);
     }
 
-    private HttpEntity<Room> createRoomHttpEntityWithMediatypeJson(Room room) {
+    private HttpEntity<RoomDto> createRoomHttpEntityWithMediatypeJson(RoomDto roomDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(room, headers);
+        return new HttpEntity<>(roomDto, headers);
     }
 
     private void postObject(String url, Object object) {
@@ -168,15 +169,17 @@ class RealEstateRegisterApplicationTests {
         restTemplate.postForEntity(url, httpEntity, String.class);
     }
 
-    private void postRoom(String url, Room room) {
-        final HttpEntity<Room> httpEntity = createRoomHttpEntityWithMediatypeJson(room);
+    private void postRoom(String url, RoomDto roomDto) {
+        final HttpEntity<RoomDto> httpEntity = createRoomHttpEntityWithMediatypeJson(roomDto);
         restTemplate.postForEntity(url, httpEntity, String.class);
     }
+
     private void assertArraysHasSameElements(Object[] expectedArr, Object[] actualArr) {
         List<Object> expected = Arrays.asList(expectedArr);
         List<Object> actual = Arrays.asList(actualArr);
         assertListsHasSameElements(expected, actual);
     }
+
     private void assertBuildingArraysHasSameElements(Building[] expectedArr, Building[] actualArr) {
         List<Building> expected = Arrays.asList(expectedArr);
         List<Building> actual = Arrays.asList(actualArr);
@@ -188,11 +191,14 @@ class RealEstateRegisterApplicationTests {
         List<Room> actual = Arrays.asList(actualArr);
         assertRoomListsHasSameElements(expected, actual);
     }
+
     private void assertListsHasSameElements(List<Object> expected, List<Object> actual) {
         assertTrue(expected.size() == actual.size() && expected.containsAll(actual) && actual.containsAll(expected));
     }
+
     private void assertBuildingListsHasSameElements(List<Building> expected, List<Building> actual) {
         assertTrue(expected.size() == actual.size() && expected.containsAll(actual) && actual.containsAll(expected));
+
     }
 
     private void assertRoomListsHasSameElements(List<Room> expected, List<Room> actual) {

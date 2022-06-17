@@ -1,48 +1,14 @@
 # About the project
-My project is a real estate registry. The buildings have different 
-##
-# Build with
-- Java
-- Java spring boot
-- JPA
-- SQL
-- H2
+My project is a real estate registry. 
 
-# Getting started
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-run the bash file to contanerisate the api
+The registry has 4 entities: 
+- building,
+- person, 
+- room, 
+- role,
 
-## Prerequisites
-This is an example of how to list things you need to use the software and how to install them.
-
-- npm
-```shell
-npm install npm@latest -g
-```
-
-## Installation
-Below is an example of how you can instruct your audience on installing and setting up your app.
-This template doesn't rely on any external dependencies or services.
-
-- Clone the repo
-  `git@github.com:CodecoolGlobal/el-proyecte-grande-sprint-4-java-Teszike99.git`
-- Install NPM packages
-  `npm install`
-
-# Usage
-- The first page you see if you open the app is a home page where you can read the main logic of this project.
-- There is a navbar in top with some buttons where you can change the pages.
-- In the profit calculator page you can see match pairs with the odds and you can calculate the
-  profit if you give the amount how many money would you like to invest.
-- The fix profit matches show the match pairs where the profit is fix. But its just a few percent profit.
-
-# Contributing
-Contributing is for show how we used version control.
-
-- We used branches and did pull requests.
-- Committed everything file by file.
-- We worked with different sprints in this project.
+And the required repository, service and controller layers of them.
+All of them have the basic crud operations, plus more.
 
 ```mermaid
 sequenceDiagram
@@ -54,23 +20,31 @@ note left of room: CRUD
 note left of building: CRUD
 note left of role: CRUD
 note left of person: CRUD
-
-
-room->>building: add to building
-role->>building: add to building
+room->>building: add room to building
+building->>room: list all rooms of a building
+role->>building: add role to building
+building->>role: list all roles of a building
 role->>person: add to person
+person->>role: list all roles of a person
 ```
-baba
-```mermaid
-sequenceDiagram
-participant Alice
-participant Bob
-Alice->>John: Hello John, how are you?
-loop Healthcheck
-John->>John: Fight against hypochondria
-end
-Note right of John: Rational thoughts <br/>prevail!
-John-->>Alice: Great!
-John->>Bob: How about you?
-Bob-->>John: Jolly good!
+# Build with
+- Java
+- Java spring boot
+- JPA
+- SQL
+- H2
+
+## Clone the repo
+  `git@github.com:blasesteban/real-estate-register-app.git`
+
+## Initialize from docker
+run the run.cmd file in the root.
+```shell
+./run.cmd
 ```
+
+## Endpoints:
+- [building](http://localhost:8080/building)
+- [person](http://localhost:8080/person)
+- [role](http://localhost:8080/role)
+- [room](http://localhost:8080/room)

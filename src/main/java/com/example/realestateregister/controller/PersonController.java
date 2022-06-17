@@ -1,10 +1,15 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.PersonDto;
 import com.example.realestateregister.dto.PersonRoleDto;
 import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +19,7 @@ import java.util.List;
 @RequestMapping("/person")
 public class PersonController {
     private final PersonService personService;
+    private final Logger logger = LoggerFactory.getLogger(BuildingController.class);
 
     @Autowired
     public PersonController(PersonService personService) {
@@ -31,13 +37,24 @@ public class PersonController {
     }
 
     @PostMapping
-    public long addPersonAndReturnId(@RequestBody @Valid Person person) {
-        return personService.addPersonAndReturnId(person);
+    public ResponseEntity<?> addPersonAndReturnId(@RequestBody @Valid PersonDto person, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid person");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid person");
+        }
+        return ResponseEntity.ok(personService.addPersonAndReturnId(person));
     }
 
     @PutMapping("/{id}")
-    public void updatePersonById(@RequestBody @Valid Person person, @PathVariable("id") long id) {
+    public ResponseEntity<String> updatePersonById(@RequestBody @Valid PersonDto person, @PathVariable("id") long id, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid person");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid person");
+        }
         personService.updatePersonById(person, id);
+        return ResponseEntity.ok("person is updated");
     }
 
     @DeleteMapping("/{id}")
@@ -46,8 +63,14 @@ public class PersonController {
     }
 
     @PostMapping("/role")
-    public void addRoleToPerson(@RequestBody @Valid PersonRoleDto personRoleDto) {
+    public ResponseEntity<String> addRoleToPerson(@RequestBody @Valid PersonRoleDto personRoleDto, BindingResult br) {
+        if (br.hasErrors()) {
+            logger.error("invalid building");
+            br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body("invalid building");
+        }
         personService.addRoleToPerson(personRoleDto);
+        return ResponseEntity.ok("role is added to person");
     }
 
     @GetMapping("/{id}/role")
