@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class RoleDto {
     @NotNull

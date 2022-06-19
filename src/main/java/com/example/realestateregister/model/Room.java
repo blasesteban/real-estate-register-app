@@ -17,13 +17,12 @@ import java.util.Objects;
 @Table(name = "room")
 public class Room {
     @NotNull
-//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @NotNull
     @Column(name = "room_type")
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     RoomType roomType;
     @Positive @Min(message = "must be at least 1 m2", value = 1)
     @Column(nullable = false)
@@ -31,17 +30,15 @@ public class Room {
     //    @NotNull
     @ManyToOne()
     @JoinColumn(name = "building", referencedColumnName = "id", foreignKey = @ForeignKey(name = "Fk_rooms_building"))
-    @JsonBackReference
-//    @JsonIgnore
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-            Building building;
+    @JsonBackReference(value = "roomBuildingReference")
+    Building building;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return id == room.id;
+        return id == room.id && size == room.size && roomType == room.roomType && Objects.equals(building, room.building);
     }
 
     @Override

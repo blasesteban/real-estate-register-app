@@ -33,6 +33,10 @@ class RoleControllerTest {
     private final Role role3 = new Role(3, RoleType.REALTOR, new Person(), new Building());
     private final List<Role> roleList = List.of(role1, role2, role3);
 
+    private RoleDto roleDtoFromEntity(Role role) {
+        return new RoleDto(role.getRoleType());
+    }
+
     @Test
     void listRoles() {
         when(roleService.listRoles()).thenReturn(roleList);
@@ -53,16 +57,16 @@ class RoleControllerTest {
     @Test
     void addRoleAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
-        when(roleService.addRoleAndReturnId(new RoleDto(role1.getRoleType()))).thenReturn(role1.getId());
-        ResponseEntity<?> expected = roleController.addRoleAndReturnId(new RoleDto(role1.getRoleType()), br);
+        when(roleService.addRoleAndReturnId(roleDtoFromEntity(role1))).thenReturn(role1.getId());
+        ResponseEntity<?> expected = roleController.addRoleAndReturnId(roleDtoFromEntity(role1), br);
         assertEquals(expected.getBody(), role1.getId());
     }
 
-    @Test
+/*    @Test
     void updateRoleById() {
     }
 
     @Test
     void deleteRoleById() {
-    }
+    }*/
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
     private final RoleService roleService;
-    private final Logger logger = LoggerFactory.getLogger(BuildingController.class);
+    private final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
     public RoleController(RoleService roleService) {
         this.roleService = roleService;

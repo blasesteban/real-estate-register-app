@@ -1,6 +1,5 @@
 package com.example.realestateregister.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
@@ -20,7 +19,6 @@ import java.util.Objects;
 @Table(name = "person")
 public class Person {
     @NotNull
-//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -30,14 +28,13 @@ public class Person {
     String surname;
     @NotBlank(message = "address is mandatory")
     String address;
-    @Pattern(regexp = "^[\\d]{4,10}$", message = "only type numbers")
+    @Pattern(regexp = "^[\\d]{4,20}$", message = "only type numbers")
     @Column(name = "phone_number")
     String phoneNumber;
     //    @NotNull
     @OneToMany(mappedBy = "person")
-    @JsonManagedReference
+    @JsonManagedReference(value = "rolePersonReference")
     @JsonDeserialize(as = List.class)
-//    @JsonIgnore
     List<Role> roles;
 
     @Override
@@ -45,7 +42,7 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id == person.id;
+        return id == person.id && Objects.equals(firstname, person.firstname) && Objects.equals(surname, person.surname) && Objects.equals(address, person.address) && Objects.equals(phoneNumber, person.phoneNumber) && Objects.equals(roles, person.roles);
     }
 
     @Override

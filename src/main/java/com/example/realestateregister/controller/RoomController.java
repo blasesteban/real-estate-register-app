@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/room")
 public class RoomController {
     private final RoomService roomService;
-    private final Logger logger = LoggerFactory.getLogger(BuildingController.class);
+    private final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
     public RoomController(RoomService roomService) {
         this.roomService = roomService;

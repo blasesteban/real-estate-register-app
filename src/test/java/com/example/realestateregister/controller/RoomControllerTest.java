@@ -32,6 +32,10 @@ class RoomControllerTest {
     private final Room room3 = new Room(3, RoomType.KITCHEN, 3, new Building());
     private final List<Room> roomList = List.of(room1, room2, room3);
 
+    private RoomDto roleDtoFromEntity(Room room) {
+        return new RoomDto(room.getRoomType(), room.getSize());
+    }
+
     @Test
     void listRooms() {
         when(roomService.listRooms()).thenReturn(roomList);
@@ -57,11 +61,11 @@ class RoomControllerTest {
         assertEquals(expected.getBody(), room1.getId());
     }
 
-    @Test
+/*    @Test
     void updateRoomById() {
     }
 
     @Test
     void deleteRoomById() {
-    }
+    }*/
 }

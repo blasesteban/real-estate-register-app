@@ -1,7 +1,9 @@
 package com.example.realestateregister.service;
 
-import com.example.realestateregister.controller.BuildingController;
 import com.example.realestateregister.dao.BuildingJpaDao;
+import com.example.realestateregister.dao.RoleJpaDao;
+import com.example.realestateregister.dao.RoomJpaDao;
+import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.Room;
@@ -16,10 +18,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -30,6 +34,10 @@ class BuildingServiceTest {
     private BuildingService buildingService;
     @Mock
     private BuildingJpaDao buildingJpaDao;
+    @Mock
+    private RoomJpaDao roomJpaDao;
+    @Mock
+    private RoleJpaDao roleJpaDao;
 
     private final Room room1 = new Room();
     private final Room room2 = new Room();
@@ -44,6 +52,10 @@ class BuildingServiceTest {
     private final Building building3 = new Building(1, 100, 150, List.of(room1, room2, room3), List.of(role2, role3));
     private final List<Building> buildingList = List.of(building1, building2, building3);
 
+    private BuildingDto buildingDtoFromEntity(Building building) {
+        return new BuildingDto(building.getSquareMeters(), building.getPrice());
+    }
+
     @Test
     void listBuildings() {
         when(buildingJpaDao.findAll()).thenReturn(buildingList);
@@ -56,10 +68,18 @@ class BuildingServiceTest {
 
     @Test
     void getBuildingById() {
+        when(buildingJpaDao.findById(1L)).thenReturn(Optional.of(building1));
+        Building expected = buildingService.getBuildingById(1);
+        assertEquals(expected, building1);
+        assertEquals(expected.getRooms(), building1.getRooms());
+        assertEquals(expected.getRoles(), building1.getRoles());
     }
 
-    @Test
+/*    @Test
     void addBuildingAndReturnId() {
+*//*        when(buildingJpaDao.save(buildingDtoFromEntity(building1))).thenReturn(building1);
+        Long expected = buildingService.addBuildingAndReturnId(buildingDtoFromEntity(building1));
+        assertEquals(expected, building1.getId());*//*
     }
 
     @Test
@@ -72,17 +92,35 @@ class BuildingServiceTest {
 
     @Test
     void addRoomToBuilding() {
-    }
+    }*/
 
     @Test
     void listRoomsByBuildingId() {
+        when(roomJpaDao.listRoomsByBuildingId(building1.getId())).thenReturn(building1.getRooms());
+        List<Room> expected1 = buildingService.listRoomsByBuildingId(building1.getId());
+        assertEquals(expected1, building1.getRooms());
+        when(roomJpaDao.listRoomsByBuildingId(building2.getId())).thenReturn(building2.getRooms());
+        List<Room> expected2 = buildingService.listRoomsByBuildingId(building2.getId());
+        assertEquals(expected2, building2.getRooms());
+        when(roomJpaDao.listRoomsByBuildingId(building3.getId())).thenReturn(building3.getRooms());
+        List<Room> expected3 = buildingService.listRoomsByBuildingId(building3.getId());
+        assertEquals(expected3, building3.getRooms());
     }
 
-    @Test
+/*    @Test
     void addRoleToBuilding() {
-    }
+    }*/
 
     @Test
     void listRolesByBuildingId() {
+        when(roleJpaDao.listRolesByBuildingId(building1.getId())).thenReturn(building1.getRoles());
+        List<Role> expected1 = buildingService.listRolesByBuildingId(building1.getId());
+        assertEquals(expected1, building1.getRoles());
+        when(roleJpaDao.listRolesByBuildingId(building2.getId())).thenReturn(building2.getRoles());
+        List<Role> expected2 = buildingService.listRolesByBuildingId(building2.getId());
+        assertEquals(expected2, building2.getRoles());
+        when(roleJpaDao.listRolesByBuildingId(building3.getId())).thenReturn(building3.getRoles());
+        List<Role> expected3 = buildingService.listRolesByBuildingId(building3.getId());
+        assertEquals(expected3, building3.getRoles());
     }
 }

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class PersonDto {
     @NotBlank(message = "firstname is mandatory")
@@ -15,7 +16,7 @@ public class PersonDto {
     String surname;
     @NotBlank(message = "address is mandatory")
     String address;
-    @Pattern(regexp = "^[0-9]{4,10}$", message = "only type numbers")
+    @Pattern(regexp = "^[\\d]{4,20}$", message = "only type numbers")
     @Column(name = "phone_number")
     String phoneNumber;
 }

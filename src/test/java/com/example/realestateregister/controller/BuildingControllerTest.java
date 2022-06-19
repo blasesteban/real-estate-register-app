@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,9 +37,13 @@ class BuildingControllerTest {
     private final Role role3 = new Role();
 
     private final Building building1 = new Building(1, 20, 25, List.of(room1), List.of(role1));
-    private final Building building2 = new Building(1, 50, 70, List.of(room1, room2), List.of(role1, role2));
-    private final Building building3 = new Building(1, 100, 150, List.of(room1, room2, room3), List.of(role2, role3));
+    private final Building building2 = new Building(2, 50, 70, List.of(room1, room2), List.of(role1, role2));
+    private final Building building3 = new Building(3, 100, 150, List.of(room1, room2, room3), List.of(role2, role3));
     private final List<Building> buildingList = List.of(building1, building2, building3);
+
+    private BuildingDto buildingDtoFromEntity(Building building) {
+        return new BuildingDto(building.getSquareMeters(), building.getPrice());
+    }
 
     @Test
     void listBuildings() {
@@ -61,13 +66,14 @@ class BuildingControllerTest {
     @Test
     void addBuildingAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
-        when(buildingService.addBuildingAndReturnId(new BuildingDto(building1.getSquareMeters(), building1.getPrice()))).thenReturn(building1.getId());
-        ResponseEntity<?> expected = buildingController.addBuildingAndReturnId(new BuildingDto(building1.getSquareMeters(), building1.getPrice()), br);
+        when(buildingService.addBuildingAndReturnId(buildingDtoFromEntity(building1))).thenReturn(building1.getId());
+        ResponseEntity<?> expected = buildingController.addBuildingAndReturnId(buildingDtoFromEntity(building1), br);
         assertEquals(expected.getBody(), building1.getId());
     }
 
-    @Test
+/*    @Test
     void updateBuildingById() {
+        //       Mockito.verify() ellenörzi, hogy meg lett-e hivva
     }
 
     @Test
@@ -76,7 +82,7 @@ class BuildingControllerTest {
 
     @Test
     void addRoomToBuilding() {
-    }
+    }*/
 
     @Test
     void listRoomsByBuildingId() {
@@ -91,9 +97,9 @@ class BuildingControllerTest {
         assertEquals(expected3, building3.getRooms());
     }
 
-    @Test
+/*    @Test
     void addRoleToBuilding() {
-    }
+    }*/
 
     @Test
     void listRolesByBuildingId() {

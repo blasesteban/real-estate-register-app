@@ -1,6 +1,5 @@
 package com.example.realestateregister.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
@@ -19,7 +18,6 @@ import java.util.Objects;
 @Table(name = "building")
 public class Building {
     @NotNull
-//    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -29,17 +27,15 @@ public class Building {
     @Positive
     @Column(nullable = false)
     long price;
-    //   @NotNull
+    //    @NotNull
     @OneToMany(mappedBy = "building")
-    @JsonManagedReference
+    @JsonManagedReference(value = "roomBuildingReference")
     @JsonDeserialize(as = List.class)
-//    @JsonIgnore
     List<Room> rooms;
-    //  @NotNull
+    //    @NotNull
     @OneToMany(mappedBy = "building")
-//    @JsonManagedReference
-//    @JsonDeserialize(as = List.class)
-    @JsonIgnore
+    @JsonManagedReference(value = "roleBuildingReference")
+    @JsonDeserialize(as = List.class)
     List<Role> roles;
 
     @Override
@@ -47,7 +43,7 @@ public class Building {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Building building = (Building) o;
-        return id == building.id;
+        return id == building.id && squareMeters == building.squareMeters && price == building.price && Objects.equals(rooms, building.rooms) && Objects.equals(roles, building.roles);
     }
 
     @Override

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class BuildingDto {
     @Positive

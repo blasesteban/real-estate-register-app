@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/person")
 public class PersonController {
     private final PersonService personService;
-    private final Logger logger = LoggerFactory.getLogger(BuildingController.class);
+    private final Logger logger = LoggerFactory.getLogger(PersonController.class);
 
     @Autowired
     public PersonController(PersonService personService) {

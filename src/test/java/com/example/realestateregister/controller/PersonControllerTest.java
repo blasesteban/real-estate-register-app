@@ -35,6 +35,10 @@ class PersonControllerTest {
     private final Person person3 = new Person(3, "c", "c", "c", "003630333333333", List.of(role1, role3));
     private final List<Person> personList = List.of(person1, person2, person3);
 
+    private PersonDto personDtoFromEntity(Person person) {
+        return new PersonDto(person.getFirstname(), person.getSurname(), person.getAddress(), person.getPhoneNumber());
+    }
+
     @Test
     void listPersons() {
         when(personService.listPersons()).thenReturn(personList);
@@ -56,12 +60,12 @@ class PersonControllerTest {
     @Test
     void addPersonAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
-        when(personService.addPersonAndReturnId(new PersonDto(person1.getFirstname(), person1.getSurname(), person1.getAddress(), person1.getPhoneNumber()))).thenReturn(person1.getId());
-        ResponseEntity<?> expected = personController.addPersonAndReturnId(new PersonDto(person1.getFirstname(), person1.getSurname(), person1.getAddress(), person1.getPhoneNumber()), br);
+        when(personService.addPersonAndReturnId(personDtoFromEntity(person1))).thenReturn(person1.getId());
+        ResponseEntity<?> expected = personController.addPersonAndReturnId(personDtoFromEntity(person1), br);
         assertEquals(expected.getBody(), person1.getId());
     }
 
-    @Test
+/*    @Test
     void updatePersonById() {
     }
 
@@ -71,9 +75,18 @@ class PersonControllerTest {
 
     @Test
     void addRoleToPerson() {
-    }
+    }*/
 
     @Test
     void listRolesByPerson() {
+        when(personService.listRolesByPerson(person1.getId())).thenReturn(person1.getRoles());
+        List<Role> expected1 = personController.listRolesByPerson(person1.getId());
+        assertEquals(expected1, person1.getRoles());
+        when(personService.listRolesByPerson(person2.getId())).thenReturn(person2.getRoles());
+        List<Role> expected2 = personController.listRolesByPerson(person2.getId());
+        assertEquals(expected2, person2.getRoles());
+        when(personService.listRolesByPerson(person3.getId())).thenReturn(person3.getRoles());
+        List<Role> expected3 = personController.listRolesByPerson(person3.getId());
+        assertEquals(expected3, person3.getRoles());
     }
 }

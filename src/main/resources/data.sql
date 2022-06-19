@@ -25,8 +25,8 @@ values (0, 1, 1),
 -- enum ('BALCONY', 'BATHROOM', 'BEDROOM', 'DINING_ROOM', 'GARAGE', 'GUEST_ROOM',
 --         'HALLWAY', 'KITCHEN', 'LIVING_ROOM', 'OFFICE', 'UTILITY_ROOM', 'WARDROBE')
 INSERT INTO room(room_type, size, building)
-values (8, 12, 1),
-       (7, 5, 1),
+values (8, 20, 1),
+       (7, 12, 1),
        (2, 15, 1),
-       (1, 10, 1),
+       (1, 5, 1),
        (0, 4, 1);
