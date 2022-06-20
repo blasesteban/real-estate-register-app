@@ -32,7 +32,7 @@ public class Person {
     @Column(name = "phone_number")
     String phoneNumber;
     //    @NotNull
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "rolePersonReference")
     @JsonDeserialize(as = List.class)
     List<Role> roles;
@@ -42,7 +42,7 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return id == person.id && Objects.equals(firstname, person.firstname) && Objects.equals(surname, person.surname) && Objects.equals(address, person.address) && Objects.equals(phoneNumber, person.phoneNumber) && Objects.equals(roles, person.roles);
+        return id == person.id;
     }
 
     @Override

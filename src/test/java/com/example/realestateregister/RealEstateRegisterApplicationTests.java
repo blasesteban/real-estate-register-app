@@ -373,15 +373,12 @@ class RealEstateRegisterApplicationTests {
     private void assertSameRole(Role expected, Role actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getRoleType(), actual.getRoleType());
-        assertEquals(expected.getBuilding(), actual.getBuilding());
-        assertEquals(expected.getPerson(), actual.getPerson());
     }
 
     private void assertSameRoom(Room expected, Room actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getRoomType(), actual.getRoomType());
         assertEquals(expected.getSize(), actual.getSize());
-        assertEquals(expected.getBuilding(), actual.getBuilding());
     }
 
     private ResponseEntity<String> postBuilding(BuildingDto buildingDto) {

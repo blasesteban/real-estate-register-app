@@ -3,6 +3,7 @@ package com.example.realestateregister.controller;
 import com.example.realestateregister.dto.RoomDto;
 import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.RoomService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +23,19 @@ public class RoomController {
         this.roomService = roomService;
     }
 
+    @Operation(summary = "List all rooms", description = "Lists all the rooms")
     @GetMapping
     public List<Room> listRooms() {
         return roomService.listRooms();
     }
 
+    @Operation(summary = "Get room", description = "Gets a room by id")
     @GetMapping("/{id}")
     public Room getRoomById(@PathVariable("id") long id) {
         return roomService.getRoomById(id);
     }
 
+    @Operation(summary = "Add room", description = "Adds a new room")
     @PostMapping
     public ResponseEntity<?> addRoomAndReturnId(@RequestBody @Valid RoomDto room, BindingResult br) {
         if (br.hasErrors()) {
@@ -42,6 +46,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.addRoomAndReturnId(room));
     }
 
+    @Operation(summary = "Update room", description = "Updates a room by id")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateRoomById(@RequestBody @Valid RoomDto room, @PathVariable("id") long id, BindingResult br) {
         if (br.hasErrors()) {
@@ -53,6 +58,7 @@ public class RoomController {
         return ResponseEntity.ok().body("room is updated");
     }
 
+    @Operation(summary = "Delete room", description = "Deletes a room by id")
     @DeleteMapping("/{id}")
     public void deleteRoomById(@PathVariable("id") long id) {
         roomService.deleteRoomById(id);

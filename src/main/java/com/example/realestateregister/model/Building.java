@@ -28,12 +28,12 @@ public class Building {
     @Column(nullable = false)
     long price;
     //    @NotNull
-    @OneToMany(mappedBy = "building")
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "roomBuildingReference")
     @JsonDeserialize(as = List.class)
     List<Room> rooms;
     //    @NotNull
-    @OneToMany(mappedBy = "building")
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "roleBuildingReference")
     @JsonDeserialize(as = List.class)
     List<Role> roles;
@@ -43,7 +43,7 @@ public class Building {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Building building = (Building) o;
-        return id == building.id && squareMeters == building.squareMeters && price == building.price && Objects.equals(rooms, building.rooms) && Objects.equals(roles, building.roles);
+        return id == building.id;
     }
 
     @Override
