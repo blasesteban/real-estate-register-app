@@ -6,7 +6,9 @@ import com.example.realestateregister.dao.RoomJpaDao;
 import com.example.realestateregister.dto.BuildingDto;
 import com.example.realestateregister.dto.BuildingRoleDto;
 import com.example.realestateregister.dto.BuildingRoomDto;
-import com.example.realestateregister.model.*;
+import com.example.realestateregister.model.Building;
+import com.example.realestateregister.model.Role;
+import com.example.realestateregister.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

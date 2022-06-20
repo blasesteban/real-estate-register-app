@@ -8,7 +8,6 @@ import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.BuildingService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
