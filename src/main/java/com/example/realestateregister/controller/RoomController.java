@@ -1,6 +1,7 @@
 package com.example.realestateregister.controller;
 
 import com.example.realestateregister.dto.RoomDto;
+import com.example.realestateregister.exceptions.InvalidRoomTypeException;
 import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +44,11 @@ public class RoomController {
             br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
             return ResponseEntity.badRequest().body("invalid room");
         }
-        return ResponseEntity.ok(roomService.addRoomAndReturnId(room));
+        try {
+            return ResponseEntity.ok(roomService.addRoomAndReturnId(room));
+        } catch (InvalidRoomTypeException e) {
+            return ResponseEntity.badRequest().body("invalid roomType");
+        }
     }
 
     @Operation(summary = "Update room", description = "Updates a room by id")
@@ -54,7 +59,11 @@ public class RoomController {
             br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
             return ResponseEntity.badRequest().body("invalid room");
         }
-        roomService.updateRoomById(room, id);
+        try {
+            roomService.updateRoomById(room, id);
+        } catch (InvalidRoomTypeException e) {
+            return ResponseEntity.badRequest().body("invalid roomType");
+        }
         return ResponseEntity.ok().body("room is updated");
     }
 

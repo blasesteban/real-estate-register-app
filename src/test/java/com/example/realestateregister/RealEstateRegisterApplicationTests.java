@@ -33,17 +33,6 @@ class RealEstateRegisterApplicationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    /*    @AfterEach
-        void setRestTemplate() {
-            Building[] buildings = restTemplate.getForObject(BUILDING_URL, Building[].class);
-            for (Building building : buildings) {
-                restTemplate.delete(BUILDING_URL + "/" + building.getId());
-            }
-            Room[] rooms = restTemplate.getForObject(ROOM_URL, Room[].class);
-            for (Room room : rooms) {
-                restTemplate.delete(ROOM_URL + "/" + room.getId());
-            }
-        }*/
     private static final BuildingDto buildingDto1 = new BuildingDto(100, 150);
     private static final BuildingDto buildingDto2 = new BuildingDto(150, 200);
     private static final BuildingDto buildingDto3 = new BuildingDto(200, 250);
@@ -54,14 +43,14 @@ class RealEstateRegisterApplicationTests {
     private static final PersonDto personDto3 = new PersonDto("Cecil", "Winston", "1031 bp", "0036303333333");
     private static final List<PersonDto> personDtoList = List.of(personDto1, personDto2, personDto3);
     private static final List<Person> expectedPersonList = new ArrayList<>();
-    private static final RoleDto roleDto1 = new RoleDto(RoleType.ARCHITECT);
-    private static final RoleDto roleDto2 = new RoleDto(RoleType.OWNER);
-    private static final RoleDto roleDto3 = new RoleDto(RoleType.REALTOR);
+    private static final RoleDto roleDto1 = new RoleDto(RoleType.ARCHITECT.toString());
+    private static final RoleDto roleDto2 = new RoleDto(RoleType.OWNER.toString());
+    private static final RoleDto roleDto3 = new RoleDto(RoleType.REALTOR.toString());
     private static final List<RoleDto> roleDtoList = List.of(roleDto1, roleDto2, roleDto3);
     private static final List<Role> expectedRoleList = new ArrayList<>();
-    private static final RoomDto roomDto1 = new RoomDto(RoomType.BEDROOM, 1);
-    private static final RoomDto roomDto2 = new RoomDto(RoomType.LIVING_ROOM, 1);
-    private static final RoomDto roomDto3 = new RoomDto(RoomType.KITCHEN, 1);
+    private static final RoomDto roomDto1 = new RoomDto(RoomType.BEDROOM.toString(), 1);
+    private static final RoomDto roomDto2 = new RoomDto(RoomType.LIVING_ROOM.toString(), 1);
+    private static final RoomDto roomDto3 = new RoomDto(RoomType.KITCHEN.toString(), 1);
     private static final List<RoomDto> roomDtoList = List.of(roomDto1, roomDto2, roomDto3);
     private static final List<Room> expectedRoomList = new ArrayList<>();
 
@@ -195,7 +184,7 @@ class RealEstateRegisterApplicationTests {
         long id = 1;
         final HttpEntity<?> httpEntity = createObjectHttpEntityWithMediatypeJson(roleDto3);
         restTemplate.put(ROLE_URL + "/" + id, httpEntity);
-        findExpectedRoleById(id).setRoleType(roleDto3.getRoleType());
+        findExpectedRoleById(id).setRoleType(RoleType.valueOf(roleDto3.getRoleType()));
         ResponseEntity<Role[]> response = restTemplate.getForEntity(ROLE_URL, Role[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Role[] actualArr = response.getBody();
@@ -245,7 +234,7 @@ class RealEstateRegisterApplicationTests {
         long id = 1;
         final HttpEntity<?> httpEntity = createObjectHttpEntityWithMediatypeJson(roomDto3);
         restTemplate.put(ROOM_URL + "/" + id, httpEntity);
-        findExpectedRoomById(id).setRoomType(roomDto3.getRoomType());
+        findExpectedRoomById(id).setRoomType(RoomType.valueOf(roomDto3.getRoomType()));
         findExpectedRoomById(id).setSize(roomDto3.getSize());
         ResponseEntity<Room[]> response = restTemplate.getForEntity(ROOM_URL, Room[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -396,14 +385,14 @@ class RealEstateRegisterApplicationTests {
     }
 
     private ResponseEntity<String> postRole(RoleDto roleDto) {
-        expectedRoleList.add(new Role(ROLE_ID, roleDto.getRoleType(), null,null));
+        expectedRoleList.add(new Role(ROLE_ID, RoleType.valueOf(roleDto.getRoleType()), null, null));
         ROLE_ID++;
         final HttpEntity<?> httpEntity = createObjectHttpEntityWithMediatypeJson(roleDto);
         return restTemplate.postForEntity(ROLE_URL, httpEntity, String.class);
     }
 
     private ResponseEntity<String> postRoom(RoomDto roomDto) {
-        expectedRoomList.add(new Room(ROOM_ID, roomDto.getRoomType(), roomDto.getSize(),null));
+        expectedRoomList.add(new Room(ROOM_ID, RoomType.valueOf(roomDto.getRoomType()), roomDto.getSize(), null));
         ROOM_ID++;
         final HttpEntity<?> httpEntity = createObjectHttpEntityWithMediatypeJson(roomDto);
         return restTemplate.postForEntity(ROOM_URL, httpEntity, String.class);

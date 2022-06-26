@@ -28,7 +28,7 @@ class RoomServiceTest {
     private final List<Room> roomList = List.of(room1, room2, room3);
 
     private RoomDto roleDtoFromEntity(Room room) {
-        return new RoomDto(room.getRoomType(), room.getSize());
+        return new RoomDto(room.getRoomType().toString(), room.getSize());
     }
 
     @Test

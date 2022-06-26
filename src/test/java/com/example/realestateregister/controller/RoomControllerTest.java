@@ -5,6 +5,7 @@ import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Room;
 import com.example.realestateregister.model.RoomType;
 import com.example.realestateregister.service.RoomService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,8 +33,8 @@ class RoomControllerTest {
     private final Room room3 = new Room(3, RoomType.KITCHEN, 3, new Building());
     private final List<Room> roomList = List.of(room1, room2, room3);
 
-    private RoomDto roleDtoFromEntity(Room room) {
-        return new RoomDto(room.getRoomType(), room.getSize());
+    private RoomDto roomDtoFromEntity(Room room) {
+        return new RoomDto(room.getRoomType().toString(), room.getSize());
     }
 
     @Test
@@ -53,11 +54,12 @@ class RoomControllerTest {
         assertEquals(expected, room1);
     }
 
+    @SneakyThrows
     @Test
     void addRoomAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
-        when(roomService.addRoomAndReturnId(new RoomDto(room1.getRoomType(), room1.getSize()))).thenReturn(room1.getId());
-        ResponseEntity<?> expected = roomController.addRoomAndReturnId(new RoomDto(room1.getRoomType(), room1.getSize()), br);
+        when(roomService.addRoomAndReturnId(roomDtoFromEntity(room1))).thenReturn(room1.getId());
+        ResponseEntity<?> expected = roomController.addRoomAndReturnId(roomDtoFromEntity(room1), br);
         assertEquals(expected.getBody(), room1.getId());
     }
 

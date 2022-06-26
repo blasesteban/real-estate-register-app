@@ -31,7 +31,7 @@ class RoleServiceTest {
     private final List<Role> roleList = List.of(role1, role2, role3);
 
     private RoleDto roleDtoFromEntity(Role role) {
-        return new RoleDto(role.getRoleType());
+        return new RoleDto(role.getRoleType().toString());
     }
 
     @Test

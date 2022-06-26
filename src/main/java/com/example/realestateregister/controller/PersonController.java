@@ -1,5 +1,6 @@
 package com.example.realestateregister.controller;
 
+import com.example.realestateregister.dto.BuildingPersonDto;
 import com.example.realestateregister.dto.PersonDto;
 import com.example.realestateregister.dto.PersonRoleDto;
 import com.example.realestateregister.model.Person;
@@ -84,5 +85,11 @@ public class PersonController {
     @GetMapping("/{id}/role")
     public List<Role> listRolesByPerson(@PathVariable("id") long id) {
         return personService.listRolesByPerson(id);
+    }
+
+    @Operation(summary = "Get buildings by person", description = "Gets all the buildings related to a person by id")
+    @GetMapping("/building/{id}")
+    public List<BuildingPersonDto> listBuildingsByPerson(@PathVariable("id") long id) {
+        return personService.listBuildingsByPerson(id);
     }
 }

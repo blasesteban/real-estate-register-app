@@ -1,18 +1,19 @@
 package com.example.realestateregister.dto;
 
 import com.example.realestateregister.model.RoleType;
+import com.example.realestateregister.model.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class RoleDto {
-    @NotNull
-    @Column(name = "role_type")
-    String roleType;
+public class BuildingPersonDto {
+    long squareMeters;
+    long price;
+    List<Room> rooms;
+    RoleType roleType;
 }

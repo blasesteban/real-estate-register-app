@@ -2,7 +2,9 @@ package com.example.realestateregister.service;
 
 import com.example.realestateregister.dao.RoomJpaDao;
 import com.example.realestateregister.dto.RoomDto;
+import com.example.realestateregister.exceptions.InvalidRoomTypeException;
 import com.example.realestateregister.model.Room;
+import com.example.realestateregister.model.RoomType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +27,24 @@ public class RoomService {
         return roomDao.findById(id).orElseThrow();
     }
 
-    public long addRoomAndReturnId(RoomDto roomDto) {
+    public long addRoomAndReturnId(RoomDto roomDto) throws InvalidRoomTypeException {
         Room room = new Room();
-        room.setRoomType(roomDto.getRoomType());
+        try {
+            room.setRoomType(RoomType.valueOf(roomDto.getRoomType().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRoomTypeException();
+        }
         room.setSize(roomDto.getSize());
         return roomDao.save(room).getId();
     }
 
-    public void updateRoomById(RoomDto roomDto, long id) {
+    public void updateRoomById(RoomDto roomDto, long id) throws InvalidRoomTypeException {
         Room room = roomDao.findById(id).orElseThrow();
-        room.setRoomType(roomDto.getRoomType());
+        try {
+            room.setRoomType(RoomType.valueOf(roomDto.getRoomType().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRoomTypeException();
+        }
         room.setSize(roomDto.getSize());
         roomDao.save(room);
     }

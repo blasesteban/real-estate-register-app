@@ -1,6 +1,7 @@
 package com.example.realestateregister.controller;
 
 import com.example.realestateregister.dto.RoleDto;
+import com.example.realestateregister.exceptions.InvalidRoleTypeException;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +44,11 @@ public class RoleController {
             br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
             return ResponseEntity.badRequest().body("invalid role");
         }
-        return ResponseEntity.ok(roleService.addRoleAndReturnId(role));
+        try {
+            return ResponseEntity.ok(roleService.addRoleAndReturnId(role));
+        } catch (InvalidRoleTypeException e) {
+            return ResponseEntity.badRequest().body("invalid roleType");
+        }
     }
 
     @Operation(summary = "Update role", description = "Updates a role by id")
@@ -54,8 +59,14 @@ public class RoleController {
             br.getAllErrors().forEach(e -> logger.error(e.getDefaultMessage()));
             return ResponseEntity.badRequest().body("invalid role");
         }
-        roleService.updateRoleById(role, id);
+        try {
+            roleService.updateRoleById(role, id);
+        } catch (InvalidRoleTypeException e) {
+            return ResponseEntity.badRequest().body("invalid roleType");
+
+        }
         return ResponseEntity.ok("role is updated");
+
     }
 
     @Operation(summary = "Delete role", description = "Deletes a role by id")

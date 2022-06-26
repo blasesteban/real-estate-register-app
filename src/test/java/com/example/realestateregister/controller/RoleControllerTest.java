@@ -6,6 +6,7 @@ import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.RoleType;
 import com.example.realestateregister.service.RoleService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,7 +35,7 @@ class RoleControllerTest {
     private final List<Role> roleList = List.of(role1, role2, role3);
 
     private RoleDto roleDtoFromEntity(Role role) {
-        return new RoleDto(role.getRoleType());
+        return new RoleDto(role.getRoleType().toString());
     }
 
     @Test
@@ -54,6 +55,7 @@ class RoleControllerTest {
         assertEquals(expected, role1);
     }
 
+    @SneakyThrows
     @Test
     void addRoleAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
