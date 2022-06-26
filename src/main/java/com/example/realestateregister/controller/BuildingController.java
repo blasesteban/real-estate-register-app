@@ -101,7 +101,7 @@ public class BuildingController {
     }
 
     @Operation(summary = "Get persons by building", description = "Gets all the persons related to a building by id")
-    @GetMapping("/person/{id}")
+    @GetMapping("/{id}/person")
     public List<PersonBuildingDto> listPersonsByBuilding(@PathVariable("id") long id) {
         return buildingService.listPersonsByBuilding(id);
     }
