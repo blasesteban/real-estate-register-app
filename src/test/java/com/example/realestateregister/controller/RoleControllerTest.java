@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,11 +65,18 @@ class RoleControllerTest {
         assertEquals(expected.getBody(), role1.getId());
     }
 
-/*    @Test
+    @SneakyThrows
+    @Test
     void updateRoleById() {
+        when(br.hasErrors()).thenReturn(false);
+        ResponseEntity<?> expected = roleController.updateRoleById(roleDtoFromEntity(role1), role1.getId(), br);
+        verify(roleService).updateRoleById(roleDtoFromEntity(role1), role1.getId());
+        assertEquals(expected.getBody(), "role is updated");
     }
 
     @Test
     void deleteRoleById() {
-    }*/
+        roleController.deleteRoleById(role1.getId());
+        verify(roleService).deleteRoleById(role1.getId());
+    }
 }

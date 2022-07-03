@@ -1,6 +1,7 @@
 package com.example.realestateregister.controller;
 
 import com.example.realestateregister.dto.PersonDto;
+import com.example.realestateregister.dto.PersonRoleDto;
 import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.service.PersonService;
@@ -14,7 +15,8 @@ import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,17 +67,27 @@ class PersonControllerTest {
         assertEquals(expected.getBody(), person1.getId());
     }
 
-/*    @Test
+    @Test
     void updatePersonById() {
+        when(br.hasErrors()).thenReturn(false);
+        ResponseEntity<?> expected = personController.updatePersonById(personDtoFromEntity(person1), person1.getId(), br);
+        verify(personService).updatePersonById(personDtoFromEntity(person1), person1.getId());
+        assertEquals(expected.getBody(), "person is updated");
     }
 
     @Test
     void deletePersonById() {
+        personController.deletePersonById(person1.getId());
+        verify(personService).deletePersonById(person1.getId());
     }
 
     @Test
     void addRoleToPerson() {
-    }*/
+        PersonRoleDto personRoleDto = new PersonRoleDto(person1.getId(), person1.getId());
+        when(br.hasErrors()).thenReturn(false);
+        personController.addRoleToPerson(personRoleDto, br);
+        verify(personService).addRoleToPerson(personRoleDto);
+    }
 
     @Test
     void listRolesByPerson() {

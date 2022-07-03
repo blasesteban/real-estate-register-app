@@ -6,6 +6,7 @@ import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.RoleType;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,15 +55,22 @@ class RoleServiceTest {
         assertEquals(expected.getBuilding(), role1.getBuilding());
     }
 
-/*    @Test
+/*    @SneakyThrows
+    @Test
     void addRoleAndReturnId() {
-    }
+    }*/
 
+    @SneakyThrows
     @Test
     void updateRoleById() {
+        when(roleJpaDao.findById(role1.getId())).thenReturn(Optional.of(role1));
+        roleService.updateRoleById(roleDtoFromEntity(role1), role1.getId());
+        verify(roleJpaDao).save(role1);
     }
 
     @Test
     void deleteRoleById() {
-    }*/
+        roleService.deleteRoleById(role1.getId());
+        verify(roleJpaDao).deleteById(role1.getId());
+    }
 }

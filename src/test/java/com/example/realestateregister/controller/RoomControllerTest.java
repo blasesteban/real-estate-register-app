@@ -16,7 +16,8 @@ import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,11 +64,18 @@ class RoomControllerTest {
         assertEquals(expected.getBody(), room1.getId());
     }
 
-/*    @Test
+    @SneakyThrows
+    @Test
     void updateRoomById() {
+        when(br.hasErrors()).thenReturn(false);
+        ResponseEntity<?> expected = roomController.updateRoomById(roomDtoFromEntity(room1), room1.getId(), br);
+        verify(roomService).updateRoomById(roomDtoFromEntity(room1), room1.getId());
+        assertEquals(expected.getBody(), "room is updated");
     }
 
     @Test
     void deleteRoomById() {
-    }*/
+        roomController.deleteRoomById(room1.getId());
+        verify(roomService).deleteRoomById(room1.getId());
+    }
 }

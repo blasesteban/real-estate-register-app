@@ -30,6 +30,7 @@ person->>role: list all roles of a person
 # Build with
 - Java
 - Java spring boot
+- Rest api
 - JPA
 - SQL
 - H2
@@ -42,7 +43,16 @@ run the run.cmd file in the root.
 ```shell
 ./run.cmd
 ```
-
+## Testing
+I wrote unit and integration tests, and postman requests.
+```shell
+mvn test
+```
+the application must run for postman.
+```shell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+newman run realestateregister.postman_collection.json
+```
 ## Endpoints:
 - [building](http://localhost:8080/building)
 - [person](http://localhost:8080/person)

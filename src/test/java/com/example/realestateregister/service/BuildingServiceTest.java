@@ -9,23 +9,15 @@ import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.Room;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,20 +69,22 @@ class BuildingServiceTest {
 
 /*    @Test
     void addBuildingAndReturnId() {
-*//*        when(buildingJpaDao.save(buildingDtoFromEntity(building1))).thenReturn(building1);
-        Long expected = buildingService.addBuildingAndReturnId(buildingDtoFromEntity(building1));
-        assertEquals(expected, building1.getId());*//*
-    }
+    }*/
 
     @Test
     void updateBuildingById() {
+        when(buildingJpaDao.findById(building1.getId())).thenReturn(Optional.of(building1));
+        buildingService.updateBuildingById(buildingDtoFromEntity(building1), building1.getId());
+        verify(buildingJpaDao).save(building1);
     }
 
     @Test
     void deleteBuildingById() {
+        buildingService.deleteBuildingById(building1.getId());
+        verify(buildingJpaDao).deleteById(building1.getId());
     }
 
-    @Test
+/*    @Test
     void addRoomToBuilding() {
     }*/
 

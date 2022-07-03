@@ -2,7 +2,10 @@ package com.example.realestateregister.service;
 
 import com.example.realestateregister.dao.RoomJpaDao;
 import com.example.realestateregister.dto.RoomDto;
-import com.example.realestateregister.model.*;
+import com.example.realestateregister.model.Building;
+import com.example.realestateregister.model.Room;
+import com.example.realestateregister.model.RoomType;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,13 +55,19 @@ class RoomServiceTest {
 
 /*    @Test
     void addRoomAndReturnId() {
-    }
+    }*/
 
+    @SneakyThrows
     @Test
     void updateRoomById() {
+        when(roomJpaDao.findById(room1.getId())).thenReturn(Optional.of(room1));
+        roomService.updateRoomById(roleDtoFromEntity(room1), room1.getId());
+        verify(roomJpaDao).save(room1);
     }
 
     @Test
     void deleteRoomById() {
-    }*/
+        roomService.deleteRoomById(room1.getId());
+        verify(roomJpaDao).deleteById(room1.getId());
+    }
 }

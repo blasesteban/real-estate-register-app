@@ -14,7 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,17 +59,22 @@ class PersonServiceTest {
 
 /*    @Test
     void addPersonAndReturnId() {
-    }
+    }*/
 
     @Test
     void updatePersonById() {
+        when(personJpaDao.findById(person1.getId())).thenReturn(Optional.of(person1));
+        personService.updatePersonById(personDtoFromEntity(person1), person1.getId());
+        verify(personJpaDao).save(person1);
     }
 
     @Test
     void deletePersonById() {
+        personService.deletePersonById(person1.getId());
+        verify(personJpaDao).deleteById(person1.getId());
     }
 
-    @Test
+/*    @Test
     void addRoleToPerson() {
     }*/
 

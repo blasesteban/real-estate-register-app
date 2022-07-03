@@ -1,7 +1,12 @@
 package com.example.realestateregister.controller;
 
-import com.example.realestateregister.dto.*;
-import com.example.realestateregister.model.*;
+import com.example.realestateregister.dto.BuildingDto;
+import com.example.realestateregister.dto.BuildingRoleDto;
+import com.example.realestateregister.dto.BuildingRoomDto;
+import com.example.realestateregister.dto.PersonBuildingDto;
+import com.example.realestateregister.model.Building;
+import com.example.realestateregister.model.Role;
+import com.example.realestateregister.model.Room;
 import com.example.realestateregister.service.BuildingService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;

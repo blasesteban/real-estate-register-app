@@ -1,6 +1,5 @@
 package com.example.realestateregister.dto;
 
-import com.example.realestateregister.model.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

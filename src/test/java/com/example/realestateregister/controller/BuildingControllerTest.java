@@ -1,6 +1,8 @@
 package com.example.realestateregister.controller;
 
 import com.example.realestateregister.dto.BuildingDto;
+import com.example.realestateregister.dto.BuildingRoleDto;
+import com.example.realestateregister.dto.BuildingRoomDto;
 import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Role;
 import com.example.realestateregister.model.Room;
@@ -9,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,18 +73,27 @@ class BuildingControllerTest {
         assertEquals(expected.getBody(), building1.getId());
     }
 
-/*    @Test
+    @Test
     void updateBuildingById() {
-        //       Mockito.verify() ellenörzi, hogy meg lett-e hivva
+        when(br.hasErrors()).thenReturn(false);
+        ResponseEntity<?> expected = buildingController.updateBuildingById(buildingDtoFromEntity(building1), building1.getId(), br);
+        verify(buildingService).updateBuildingById(buildingDtoFromEntity(building1), building1.getId());
+        assertEquals(expected.getBody(), "building is updated");
     }
 
     @Test
     void deleteBuildingById() {
+        buildingController.deleteBuildingById(building1.getId());
+        verify(buildingService).deleteBuildingById(building1.getId());
     }
 
     @Test
     void addRoomToBuilding() {
-    }*/
+        BuildingRoomDto buildingRoomDto = new BuildingRoomDto(building1.getId(), room1.getId());
+        when(br.hasErrors()).thenReturn(false);
+        buildingController.addRoomToBuilding(buildingRoomDto, br);
+        verify(buildingService).addRoomToBuilding(buildingRoomDto);
+    }
 
     @Test
     void listRoomsByBuildingId() {
@@ -97,9 +108,13 @@ class BuildingControllerTest {
         assertEquals(expected3, building3.getRooms());
     }
 
-/*    @Test
+    @Test
     void addRoleToBuilding() {
-    }*/
+        BuildingRoleDto buildingRoleDto = new BuildingRoleDto(building1.getId(), role1.getId());
+        when(br.hasErrors()).thenReturn(false);
+        buildingController.addRoleToBuilding(buildingRoleDto, br);
+        verify(buildingService).addRoleToBuilding(buildingRoleDto);
+    }
 
     @Test
     void listRolesByBuildingId() {

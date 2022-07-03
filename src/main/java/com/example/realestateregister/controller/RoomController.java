@@ -64,7 +64,7 @@ public class RoomController {
         } catch (InvalidRoomTypeException e) {
             return ResponseEntity.badRequest().body("invalid roomType");
         }
-        return ResponseEntity.ok().body("room is updated");
+        return ResponseEntity.ok("room is updated");
     }
 
     @Operation(summary = "Delete room", description = "Deletes a room by id")
