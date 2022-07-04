@@ -1,0 +1,2 @@
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+newman run realestateregister.postman_collection.json

@@ -1,33 +1,33 @@
-# About the project
-My project is a real estate registry. 
+# A projektről
+A projektem egy ingatlan nyilvántartás
 
-The registry has 4 entities: 
-- building,
-- person, 
-- room, 
-- role,
+A regiszter 4 entity osztállyal rendelkezik: 
+- épület,
+- személy, 
+- szoba, 
+- szerep,
 
-And the required repository, service and controller layers of them.
-All of them have the basic crud operations, plus more.
+És ezek mindegyikéhez tartozik egy repository, service és controller osztály.
+Minden osztály rendelkezik az alap crud műveletekkel, vagy annál többel.
 
 ```mermaid
 sequenceDiagram
-participant room
-participant building
-participant role
-participant person
-note left of room: CRUD
-note left of building: CRUD
-note left of role: CRUD
-note left of person: CRUD
-room->>building: add room to building
-building->>room: list all rooms of a building
-role->>building: add role to building
-building->>role: list all roles of a building
-role->>person: add to person
-person->>role: list all roles of a person
+participant szoba
+participant epulet
+participant szerep
+participant szemely
+note left of szoba: CRUD
+note left of epulet: CRUD
+note left of szerep: CRUD
+note left of szemely: CRUD
+szoba->>epulet: szoba hozzaadasa epulethez
+epulet->>szoba: az epulet osszes szobajanak listazasa
+szerep->>epulet: szerep hozzaadasa epulethez
+epulet->>szerep: az epulethez kapcsolodo osszes szerep listazasa
+szerep->>szemely: szerep hozzaadasa szemelyhez
+szemely->>szerep: a szemely osszes szerepenek listazasa
 ```
-# Build with
+# Felhasznált technológiák
 - Java
 - Java spring boot
 - Rest api
@@ -35,26 +35,31 @@ person->>role: list all roles of a person
 - SQL
 - H2
 
-## Clone the repo
+## Repo klónozás 
   `git@github.com:blasesteban/real-estate-register-app.git`
 
-## Initialize from docker
-run the run.cmd file in the root.
+## Környezeti változók
+futtasd a env.bat fájlt a gyökérben a környezeti változók beállításához.
+```shell
+./env.bat
+```
+## Docker indítás
+futtasd a run.cmd fájlt a gyökérben.
 ```shell
 ./run.cmd
 ```
-## Testing
-I wrote unit and integration tests, and postman requests.
+## Tesztelés
+A teszteléshez unit és integrációs teszteket készítettem, továbbá postman lekéréseket adtam meg.
 ```shell
 mvn test
 ```
-the application must run for postman.
+A postman lekérésekhez az alkalmazásnak futnia kell.
 ```shell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-newman run realestateregister.postman_collection.json
+./newman.cmd
 ```
-## Endpoints:
-- [building](http://localhost:8080/building)
-- [person](http://localhost:8080/person)
-- [role](http://localhost:8080/role)
+
+## Végpontok:
+- [épület](http://localhost:8080/building)
+- [személy](http://localhost:8080/person)
+- [szerep](http://localhost:8080/role)
 - [room](http://localhost:8080/room)
