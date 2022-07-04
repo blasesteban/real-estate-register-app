@@ -74,11 +74,25 @@ class BuildingControllerTest {
     }
 
     @Test
+    void addBuildingAndReturnIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = buildingController.addBuildingAndReturnId(new BuildingDto(), br);
+        assertEquals(expected.getBody(), "invalid building");
+    }
+
+    @Test
     void updateBuildingById() {
         when(br.hasErrors()).thenReturn(false);
         ResponseEntity<?> expected = buildingController.updateBuildingById(buildingDtoFromEntity(building1), building1.getId(), br);
         verify(buildingService).updateBuildingById(buildingDtoFromEntity(building1), building1.getId());
         assertEquals(expected.getBody(), "building is updated");
+    }
+
+    @Test
+    void updateBuildingByIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = buildingController.updateBuildingById(new BuildingDto(), building1.getId(), br);
+        assertEquals(expected.getBody(), "invalid building");
     }
 
     @Test
@@ -93,6 +107,14 @@ class BuildingControllerTest {
         when(br.hasErrors()).thenReturn(false);
         buildingController.addRoomToBuilding(buildingRoomDto, br);
         verify(buildingService).addRoomToBuilding(buildingRoomDto);
+    }
+
+    @Test
+    void addRoomToBuildingWrong() {
+        BuildingRoomDto buildingRoomDto = new BuildingRoomDto(new Building().getId(), new Room().getId());
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = buildingController.addRoomToBuilding(buildingRoomDto, br);
+        assertEquals(expected.getBody(), "invalid room id or building id");
     }
 
     @Test
@@ -114,6 +136,14 @@ class BuildingControllerTest {
         when(br.hasErrors()).thenReturn(false);
         buildingController.addRoleToBuilding(buildingRoleDto, br);
         verify(buildingService).addRoleToBuilding(buildingRoleDto);
+    }
+
+    @Test
+    void addRoleToBuildingWrong() {
+        BuildingRoleDto buildingRoleDto = new BuildingRoleDto(new Building().getId(), new Role().getId());
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = buildingController.addRoleToBuilding(buildingRoleDto, br);
+        assertEquals(expected.getBody(), "invalid role id or building id");
     }
 
     @Test

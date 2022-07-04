@@ -68,11 +68,25 @@ class PersonControllerTest {
     }
 
     @Test
+    void addPersonAndReturnIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = personController.addPersonAndReturnId(new PersonDto(), br);
+        assertEquals(expected.getBody(), "invalid person");
+    }
+
+    @Test
     void updatePersonById() {
         when(br.hasErrors()).thenReturn(false);
         ResponseEntity<?> expected = personController.updatePersonById(personDtoFromEntity(person1), person1.getId(), br);
         verify(personService).updatePersonById(personDtoFromEntity(person1), person1.getId());
         assertEquals(expected.getBody(), "person is updated");
+    }
+
+    @Test
+    void updatePersonByIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = personController.updatePersonById(new PersonDto(), person1.getId(), br);
+        assertEquals(expected.getBody(), "invalid person");
     }
 
     @Test
@@ -83,10 +97,18 @@ class PersonControllerTest {
 
     @Test
     void addRoleToPerson() {
-        PersonRoleDto personRoleDto = new PersonRoleDto(person1.getId(), person1.getId());
+        PersonRoleDto personRoleDto = new PersonRoleDto(person1.getId(), role1.getId());
         when(br.hasErrors()).thenReturn(false);
         personController.addRoleToPerson(personRoleDto, br);
         verify(personService).addRoleToPerson(personRoleDto);
+    }
+
+    @Test
+    void addRoleToPersonWrong() {
+        PersonRoleDto personRoleDto = new PersonRoleDto(new Person().getId(), new Role().getId());
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = personController.addRoleToPerson(personRoleDto, br);
+        assertEquals(expected.getBody(), "invalid role id or person id");
     }
 
     @Test

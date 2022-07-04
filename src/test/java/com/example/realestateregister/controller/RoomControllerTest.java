@@ -64,6 +64,13 @@ class RoomControllerTest {
         assertEquals(expected.getBody(), room1.getId());
     }
 
+    @Test
+    void addRoomAndReturnIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = roomController.addRoomAndReturnId(new RoomDto(), br);
+        assertEquals(expected.getBody(), "invalid room");
+    }
+
     @SneakyThrows
     @Test
     void updateRoomById() {
@@ -71,6 +78,13 @@ class RoomControllerTest {
         ResponseEntity<?> expected = roomController.updateRoomById(roomDtoFromEntity(room1), room1.getId(), br);
         verify(roomService).updateRoomById(roomDtoFromEntity(room1), room1.getId());
         assertEquals(expected.getBody(), "room is updated");
+    }
+
+    @Test
+    void updateRoomByIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = roomController.updateRoomById(new RoomDto(), room1.getId(), br);
+        assertEquals(expected.getBody(), "invalid room");
     }
 
     @Test

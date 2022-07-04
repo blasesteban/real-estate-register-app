@@ -1,6 +1,7 @@
 package com.example.realestateregister.controller;
 
 import com.example.realestateregister.dto.RoleDto;
+import com.example.realestateregister.exceptions.InvalidRoleTypeException;
 import com.example.realestateregister.model.Building;
 import com.example.realestateregister.model.Person;
 import com.example.realestateregister.model.Role;
@@ -60,9 +61,16 @@ class RoleControllerTest {
     @Test
     void addRoleAndReturnId() {
         when(br.hasErrors()).thenReturn(false);
-        when(roleService.addRoleAndReturnId(roleDtoFromEntity(role1))).thenReturn(role1.getId());
-        ResponseEntity<?> expected = roleController.addRoleAndReturnId(roleDtoFromEntity(role1), br);
+        when(roleService.addRoleAndReturnId(new RoleDto())).thenReturn(role1.getId());
+        ResponseEntity<?> expected = roleController.addRoleAndReturnId(new RoleDto(), br);
         assertEquals(expected.getBody(), role1.getId());
+    }
+
+    @Test
+    void addRoleAndReturnIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = roleController.addRoleAndReturnId(new RoleDto(), br);
+        assertEquals(expected.getBody(), "invalid role");
     }
 
     @SneakyThrows
@@ -72,6 +80,13 @@ class RoleControllerTest {
         ResponseEntity<?> expected = roleController.updateRoleById(roleDtoFromEntity(role1), role1.getId(), br);
         verify(roleService).updateRoleById(roleDtoFromEntity(role1), role1.getId());
         assertEquals(expected.getBody(), "role is updated");
+    }
+
+    @Test
+    void updateRoleByIdWrong() {
+        when(br.hasErrors()).thenReturn(true);
+        ResponseEntity<?> expected = roleController.updateRoleById(new RoleDto(), role1.getId(), br);
+        assertEquals(expected.getBody(), "invalid role");
     }
 
     @Test
