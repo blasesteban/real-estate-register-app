@@ -1,7 +1,7 @@
 # A projektről
 A projektem egy ingatlan nyilvántartás
 
-A rregiszter 4 entity osztállyal rendelkezik: 
+A regiszter 4 entity osztállyal rendelkezik: 
 - épület,
 - személy, 
 - szoba, 
